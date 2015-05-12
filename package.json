@@ -1,13 +1,13 @@
 {
-  "name": "vinbud",
-  "version": "1.0.0",
-  "description": "",
-  "main": "productList.js",
+  "name": "vinbud-scraper",
+  "version": "1.1.0",
+  "description": "Scrapes the icelandinc state-owned liquor store",
+  "main": "src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "run": "phantomjs src/main"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Davíð Arnarsson",
+  "license": "MIT",
   "dependencies": {
     "merge": "^1.2.0",
     "q": "^1.4.0"
