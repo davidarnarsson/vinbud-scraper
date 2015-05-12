@@ -1,7 +1,7 @@
 var Emitter = require('./emitter');
 var scrapeUtils = require('./scrapeUtils');
 
-var ProductListScraper = function (page) {
+var ProductListScraper = function(page) {
   Emitter.call(this);
   this.page = page;
   this.ROOT_URL = "http://www.vinbudin.is/DesktopDefault.aspx/tabid-64?AdvSearch=1&AvailableInStores=True&SpecialOrder=True&searchstring=";
@@ -10,11 +10,11 @@ var ProductListScraper = function (page) {
 ProductListScraper.prototype = Object.create(Emitter.prototype, {});
 ProductListScraper.prototype.constructor = ProductListScraper;
 
-/**
+/*
  * Finds products on a product search page on vinbudin. Depends on a PhantomJS DOM. 
- * */
-var findProducts = function () {
-  var mapSingleProduct = function (row) {
+ */
+var findProducts = function() {
+  var mapSingleProduct = function(row) {
     var sibling = row.nextSibling;
     var product = {
       img: row.querySelector('.img img').src,
@@ -54,14 +54,15 @@ var findProducts = function () {
   Gets the next page on a vinbud product search page. Depends on a PhantomJS DOM.
  */
 var getNextPage = function () {
-  var next = document.querySelector('span.selectedpage').nextSibling;
+  var current = document.querySelector('.selectedpage');
+  var next = document.querySelector('.paging_button_next');
 
-  if (!next || (next && !next.classList.contains('notselectedpage'))) {
+  if (!next || (next && next.classList && next.classList.contains('aspNetDisabled'))) {
     return null;
   }
 
   next.click();
-  return next.innerText;
+  return current.innerText;
 };
 
 /**
@@ -78,45 +79,56 @@ var scrape = function (url, scraper) {
   var scrapeProducts = function () {
     var products = page.evaluate(findProducts);
 
+    console.log('Got: ' + products.length + ' products');
+
     if (products && products.length) {
       products.map(function (p) {
         scraper.emit('product', p);
       });
     }
 
+    console.log('Getting the next page');
+
     var next = page.evaluate(getNextPage);
 
     if (!next) {
-      return scraper.emit('end');
+      console.log('There is no next page!');
+      debugger;
+      scraper.emit('end');
+      return;
+    } else {
+      console.log('Waiting for the page to load');
+      scrapeUtils.waitForTextChange(page, 'span.selectedpage', function() {
+        scraper.emit('newPage', next);
+        scrapeProducts();
+      });
     }
-
-    scrapeUtils.waitForTextChange(page, 'span.selectedpage', function () {
-      scraper.emit('newPage', next);
-      scrapeProducts();
-    });
   };
 
-  page.open(url, function (status) {
-    if (status !== "success") {
+  page.open(url, function(status) {
+    if (status !== 'success') {
       return scraper.emit('error', status);
     }
-    
+
     // select 30 products per page to limit requests
-    page.evaluate(function () {
-      document.querySelector("#ctl01_ctl00_LinkButton30ProductsOnPage").click();
+    page.evaluate(function() {
+      console.log('Clicking to expand to 30 products per page!');
+      document.querySelector('#ctl01_ctl00_LinkButton30ProductsOnPage').click();
     });
-    
+
     // once the page has reloaded with 30 products
-    scrapeUtils.waitFor(page, function () {
-      return document.querySelector("#ctl01_ctl00_LinkButton30ProductsOnPage").classList.contains('page-size-active');
-    }, function () {
+    scrapeUtils.waitFor(page, function() {
+      return document.querySelector('#ctl01_ctl00_LinkButton30ProductsOnPage')
+               .classList.contains('page-size-active');
+    }, function() {
         // we start a-scrapin'!
+        console.log('Starting to scrape!');
         scrapeProducts();
       });
   });
 };
 
-ProductListScraper.prototype.scrape = function () {
+ProductListScraper.prototype.scrape = function() {
   try {
     scrape(this.ROOT_URL, this);
   } catch (e) {
