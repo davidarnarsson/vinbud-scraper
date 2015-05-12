@@ -47,7 +47,6 @@ var scrapeMetaData = function (url, page) {
     // knowing .NET, these IDs might break rather easily.
     metadata.year = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductYear");
     metadata.abv = scrapeUtils.getString(page, '#ctl01_ctl00_Label_ProductAlchoholVolume');
-    metadata.volume = scrapeUtils.getString(page, '#ctl01_ctl00_Label_ProductBottledVolume');
     metadata.category = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSubCategory");
     metadata.wholeseller = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSeller");
     metadata.country = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductCountryOfOrigin");

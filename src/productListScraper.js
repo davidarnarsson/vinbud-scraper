@@ -22,7 +22,7 @@ var findProducts = function () {
       id: row.querySelector('.title span').innerText,
       title: row.querySelector('.title a').innerText,
       weight: row.querySelector('.weight').innerText,
-      volume: row.querySelector('.volume').innerText,
+      abv: row.querySelector('.volume').innerText,
       price: row.querySelector('.price').innerText,
       description: sibling.querySelector('.description').innerText,
       naut: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Naut.gif"]'),
