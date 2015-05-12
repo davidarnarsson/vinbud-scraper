@@ -39,7 +39,7 @@ var scrapeMetaData = function (url, page) {
   
   page.open(url, function(status) {
     if (status !== 'success') {
-      return deferred.reject();
+      return deferred.reject(status);
     }
     
     var metadata = {};

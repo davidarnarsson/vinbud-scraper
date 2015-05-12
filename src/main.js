@@ -5,43 +5,52 @@ var Q = require('q');
 
 var s = new ProductListScraper(require('webpage').create());
 var products = [];
+var withMetadata = [];
 
 var dumpAndExit = function() {
   require('fs').write('../out/products-incomplete.json', JSON.stringify(products), 'w');
   phantom.exit();
 };
 
-var scrapeIndividualProduct = function (i, page) {
-  var product = products[i];
-  var onSuccess = function (metadata) {
-    console.log('Success: ' + product.title);
-    products[i] = merge(product, metadata);
-    return scrapeIndividualProduct((i+1), page);
+var scrapeIndividualProduct = function (page) {
+  return function (p) {
+    return function() {
+      var onSuccess = function (metadata) {
+        console.log('Success: ' + p.title);
+        
+        withMetadata.push(merge(p, metadata));
+      };
+      
+      var onError = function (e) {
+        console.log('Error: ' + p.title);
+        withMetadata.push(p); 
+      };
+      
+      return scrapeMetaData(p.link, page).then(onSuccess, onError);  
+    };  
   };
-  
-  var onError = function (e) {
-    console.log('Error: ' + product.title);
-    return scrapeIndividualProduct((i+1), page);
-  };
-  
-  return scrapeMetaData(product.link, page).then(onSuccess, onError);
 };
 
 var onProductListScrapeEnd = function() {
-  require('fs').write('../out/products-no-metadata.json', JSON.stringify(products), 'w');
+  require('fs').write('out/products-no-metadata.json', JSON.stringify(products), 'w');
   
   var page = require('webpage').create();
-  scrapeIndividualProduct(0, page).then(function() {
+   
+  // turn the products into metadata scrape-producing functions
+  var pfuncs = products.map(scrapeIndividualProduct(page));
+  
+  // and execute sequencially, one product at a time 
+  pfuncs.reduce(Q.when, Q([])).then(function() {
     page.close();
-    require('fs').write('../out/products-metadata.json', JSON.stringify(products), 'w');
+    require('fs').write('out/products-metadata.json', JSON.stringify(withMetadata), 'w');
     phantom.exit();
-  });;
-  
-    
-  
+  });
 };
 
 s.on('error', dumpAndExit);
+
+// when the product list scrape is complete, write out the products
+// without metadata and then scrape the metadata.
 s.on('end', onProductListScrapeEnd);
 
 s.on('product', function(p) {
@@ -52,6 +61,4 @@ s.on('newPage', function (p) {
   console.log('New Page: ' + p);
 });
 
-//s.scrape();
-products = require('../out/products-no-metadata.json');
-onProductListScrapeEnd();
+s.scrape();

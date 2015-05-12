@@ -6,7 +6,7 @@ Requires PhantomJS to run.
 
 It outputs two JSON files, `products-no-metadata.json` and `products-metadata.json`. The former is the result of scraping the product list, and the latter is the result of scraping each individual product page. 
 
-Needless to say, the latter is more detailed, and takes approximately 1 hour to complete.
+Needless to say, the latter is more detailed, and takes approximately 1 hour to complete. Scraping the product list only takes a couple of minutes.
 
 To run it, you need phantomjs on your path.
 
