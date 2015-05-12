@@ -34,33 +34,35 @@ var scrapeStockTables = function () {
 
 
 
-var scrapeMetaData = function (url, page) {
+var scrapeMetaData = function (url, pagePool) {
   var deferred = Q.defer();
-
-  page.open(url, function (status) {
-    if (status !== 'success') {
-      return deferred.reject(status);
-    }
-
-    var metadata = {};
-    
-    // knowing .NET, these IDs might break rather easily.
-    metadata.year = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductYear");
-    metadata.abv = scrapeUtils.getString(page, '#ctl01_ctl00_Label_ProductAlchoholVolume');
-    metadata.category = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSubCategory");
-    metadata.wholeseller = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSeller");
-    metadata.country = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductCountryOfOrigin");
-    metadata.reserve = scrapeUtils.exists(page, "#ctl01_ctl00_Image_SpecialReserve");
-    metadata.description = scrapeUtils.getString(page, '#ctl01_ctl00_Label_ProductDescription');
-    metadata.stockLastUpdated = scrapeUtils.getString(page, '#ctl01_ctl00_span_stockStatusLastUpdated strong')
-      .replace('[', '')
-      .replace(']', '');
-
-    metadata.availability = page.evaluate(scrapeStockTables);
-
-    deferred.resolve(metadata);
+  pagePool.acquire().then(function(page) {
+    page.open(url, function (status) {
+      if (status !== 'success') {
+        pagePool.release(page);
+        return deferred.reject(status);
+      }
+  
+      var metadata = {};
+      
+      // knowing .NET, these IDs might break rather easily.
+      metadata.year = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductYear");
+      metadata.abv = scrapeUtils.getString(page, '#ctl01_ctl00_Label_ProductAlchoholVolume');
+      metadata.category = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSubCategory");
+      metadata.wholeseller = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSeller");
+      metadata.country = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductCountryOfOrigin");
+      metadata.reserve = scrapeUtils.exists(page, "#ctl01_ctl00_Image_SpecialReserve");
+      metadata.description = scrapeUtils.getString(page, '#ctl01_ctl00_Label_ProductDescription');
+      metadata.stockLastUpdated = scrapeUtils.getString(page, '#ctl01_ctl00_span_stockStatusLastUpdated strong')
+        .replace('[', '')
+        .replace(']', '');
+  
+      metadata.availability = page.evaluate(scrapeStockTables);
+      pagePool.release(page);
+      deferred.resolve(metadata);
+    });   
   });
-
+ 
   return deferred.promise;
 };
 
