@@ -1,0 +1,15 @@
+{
+  "name": "vinbud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "productList.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "merge": "^1.2.0",
+    "q": "^1.4.0"
+  }
+}
