@@ -2,7 +2,7 @@
 
 Scrapes the icelandic state-owned liquor store for product information. 
 
-Requires PhantomJS to run.
+Requires PhantomJS 2.0 to run. Previous versions will not work.
 
 It outputs two JSON files, `products-no-metadata.json` and `products-metadata.json`. The former is the result of scraping the product list, and the latter is the result of scraping each individual product page. 
 
