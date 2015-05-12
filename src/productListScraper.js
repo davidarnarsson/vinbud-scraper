@@ -1,22 +1,22 @@
 var Emitter = require('./emitter');
 var scrapeUtils = require('./scrapeUtils');
 
-var ProductListScraper = function(page) {
+var ProductListScraper = function (page) {
   Emitter.call(this);
   this.page = page;
   this.ROOT_URL = "http://www.vinbudin.is/DesktopDefault.aspx/tabid-64?AdvSearch=1&AvailableInStores=True&SpecialOrder=True&searchstring=";
 };
 
-ProductListScraper.prototype = Object.create(Emitter.prototype,{});
+ProductListScraper.prototype = Object.create(Emitter.prototype, {});
 ProductListScraper.prototype.constructor = ProductListScraper;
 
 /**
  * Finds products on a product search page on vinbudin. Depends on a PhantomJS DOM. 
  * */
-var findProducts = function() {
-  var mapSingleProduct = function(row) {
-  	var sibling = row.nextSibling;
-  	var product = {
+var findProducts = function () {
+  var mapSingleProduct = function (row) {
+    var sibling = row.nextSibling;
+    var product = {
       img: row.querySelector('.img img').src,
       link: row.querySelector('.title a').href,
       id: row.querySelector('.title span').innerText,
@@ -29,25 +29,25 @@ var findProducts = function() {
       lamb: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Lamb.gif"]'),
       grill: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Grill.gif"]'),
       lettariVillibrad: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/LettariVillibrad.gif"]'),
-      tilbuidAdDrekka:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/TilbuidAdDrekka.gif"]'),
-      gris:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Gris.gif"]'),
-      fiskur:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Fiskur.gif"]'),
-      skelfiskur:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Skelfiskur.gif"]'),
-      ostur:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Ostur.gif"]'),
-      villibrad:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Villibrad.gif"]'),
-      alifuglar:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Alifuglar.gif"]'),
-      pasta:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Pasta.gif"]'),
-      graenmeti:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Graenmetisrettir.gif"]'),
-      eftirrettir:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Eftirrettir.gif"]'),
-      reserve:  !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/SpecialReserve.gif"]')
+      tilbuidAdDrekka: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/TilbuidAdDrekka.gif"]'),
+      gris: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Gris.gif"]'),
+      fiskur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Fiskur.gif"]'),
+      skelfiskur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Skelfiskur.gif"]'),
+      ostur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Ostur.gif"]'),
+      villibrad: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Villibrad.gif"]'),
+      alifuglar: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Alifuglar.gif"]'),
+      pasta: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Pasta.gif"]'),
+      graenmeti: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Graenmetisrettir.gif"]'),
+      eftirrettir: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Eftirrettir.gif"]'),
+      reserve: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/SpecialReserve.gif"]')
     };
-  	
-  	return product;
+
+    return product;
   };
-  
+
   return Array.prototype.slice
-      .call(document.querySelectorAll('.product-table tr.upper'))
-      .map(mapSingleProduct);
+    .call(document.querySelectorAll('.product-table tr.upper'))
+    .map(mapSingleProduct);
 };
 
 /** 
@@ -55,11 +55,11 @@ var findProducts = function() {
  */
 var getNextPage = function () {
   var next = document.querySelector('span.selectedpage').nextSibling;
-  
+
   if (!next || (next && !next.classList.contains('notselectedpage'))) {
     return null;
   }
-    
+
   next.click();
   return next.innerText;
 };
@@ -69,7 +69,7 @@ var getNextPage = function () {
  */
 var scrape = function (url, scraper) {
   var page = scraper.page;
-  page.onConsoleMessage = function(msg) {
+  page.onConsoleMessage = function (msg) {
     console.log('Browser: ' + msg);
   };
   
@@ -77,27 +77,27 @@ var scrape = function (url, scraper) {
   // we repeatedly scrape the same page for products
   var scrapeProducts = function () {
     var products = page.evaluate(findProducts);
-    
+
     if (products && products.length) {
-      products.map(function(p) {
-         scraper.emit('product', p);
+      products.map(function (p) {
+        scraper.emit('product', p);
       });
     }
-    
+
     var next = page.evaluate(getNextPage);
-    
+
     if (!next) {
       return scraper.emit('end');
     }
-    
-    scrapeUtils.waitForTextChange(page,'span.selectedpage', function () {
+
+    scrapeUtils.waitForTextChange(page, 'span.selectedpage', function () {
       scraper.emit('newPage', next);
       scrapeProducts();
     });
   };
-  
-	page.open(url, function (status) {
-		if (status !== "success") {
+
+  page.open(url, function (status) {
+    if (status !== "success") {
       return scraper.emit('error', status);
     }
     
@@ -110,15 +110,15 @@ var scrape = function (url, scraper) {
     scrapeUtils.waitFor(page, function () {
       return document.querySelector("#ctl01_ctl00_LinkButton30ProductsOnPage").classList.contains('page-size-active');
     }, function () {
-      // we start a-scrapin'!
-      scrapeProducts();  
-    });
-	});
+        // we start a-scrapin'!
+        scrapeProducts();
+      });
+  });
 };
 
 ProductListScraper.prototype.scrape = function () {
   try {
-    scrape(this.ROOT_URL, this);  
+    scrape(this.ROOT_URL, this);
   } catch (e) {
     this.trigger('error', e);
   }

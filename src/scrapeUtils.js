@@ -1,11 +1,11 @@
 var scrapeUtils = {
-  waitForTextChange: function(page, selector, cb) {
-    var getText = function(selector) {
+  waitForTextChange: function (page, selector, cb) {
+    var getText = function (selector) {
       return document.querySelector(selector).innerText;
     };
     var current = page.evaluate(getText, selector);
-    
-    var intervalId = setInterval(function() {
+
+    var intervalId = setInterval(function () {
       var now = page.evaluate(getText, selector);
       if (current !== now) {
         clearInterval(intervalId);
