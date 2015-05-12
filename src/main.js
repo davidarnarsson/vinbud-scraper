@@ -58,6 +58,4 @@ s.on('newPage', function (p) {
   console.log('New Page: ' + p);
 });
 
-//s.scrape();
-products = require('../out/products-no-metadata.json');
-onProductListScrapeEnd();
+s.scrape();
