@@ -18,7 +18,7 @@ phantomjs src/main.js
 ### Things that can be improved: 
 
  * Even though the "architecture" supports streaming product results directly to a file, the entire product array is stored in-memory, which is unnecessary. Should be an easy fix.
- * The product metadata scraping could possibly be sped up alot with a little parallelization. That probably means master/slave processes or batching HTTP calls, and I'm too lazy for that :)
+ * ~~The product metadata scraping could possibly be sped up alot with a little parallelization. That probably means master/slave processes or batching HTTP calls, and I'm too lazy for that :)~~ Turns out I wasn't too lazy.
  
 
 ### Example documents 
