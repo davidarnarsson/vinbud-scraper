@@ -4,7 +4,7 @@
   "description": "Scrapes the icelandinc state-owned liquor store",
   "main": "src/main.js",
   "scripts": {
-    "run": "npm install && phantomjs src/main.js"
+    "start": "npm install && phantomjs src/main.js"
   },
   "author": "Davíð Arnarsson",
   "license": "MIT",
