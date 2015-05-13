@@ -12,7 +12,7 @@ var scrapeUtils = {
       console.log('Text is now: ' + now);
       if (current !== now) {
         clearInterval(intervalId);
-        cb();
+        cb(now);
       }
     }, 200);
   },

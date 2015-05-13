@@ -97,8 +97,8 @@ var scrape = function (url, scraper) {
       return;
     } else {
       console.log('Waiting for the page to load');
-      scrapeUtils.waitForTextChange(page, 'span.selectedpage', function() {
-        scraper.emit('newPage', next);
+      scrapeUtils.waitForTextChange(page, 'span.selectedpage', function(n) {
+        scraper.emit('newPage', n);
         scrapeProducts();
       });
     }
