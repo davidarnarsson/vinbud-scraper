@@ -3,10 +3,13 @@ var scrapeUtils = {
     var getText = function (selector) {
       return document.querySelector(selector).innerText;
     };
+
     var current = page.evaluate(getText, selector);
+    console.log('Waiting for ' + current + ' to change');
 
     var intervalId = setInterval(function () {
       var now = page.evaluate(getText, selector);
+      console.log('Text is now: ' + now);
       if (current !== now) {
         clearInterval(intervalId);
         cb();
