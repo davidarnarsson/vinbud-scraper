@@ -93,7 +93,6 @@ var scrape = function (url, scraper) {
 
     if (!next) {
       console.log('There is no next page!');
-      debugger;
       scraper.emit('end');
       return;
     } else {
