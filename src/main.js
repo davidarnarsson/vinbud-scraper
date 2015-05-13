@@ -9,10 +9,9 @@ var PagePool = require('./pagePool');
 var s = new ProductListScraper(require('webpage').create());
 
 var products = [];
-var withMetadata = [];
 
 var dumpAndExit = function() {
-  console('Dumping data to a file!');
+  console.log('Dumping data to a file!');
   fs.write('../out/products-incomplete.json', JSON.stringify(products), 'w');
   console.log('Exiting!');
   phantom.exit();
@@ -44,7 +43,6 @@ var onProductListScrapeEnd = function() {
   // ...and fire on all cylinders!
   Q.all(products.map(scrapeIndividualProduct(pagePool))).then(function(ps) {
     pagePool.destroy();
-    require('fs').write('out/products-metadata.json', JSON.stringify(ps), 'w');
     fs.write('out/products-metadata.json', JSON.stringify(ps), 'w');
 
     phantom.exit();
