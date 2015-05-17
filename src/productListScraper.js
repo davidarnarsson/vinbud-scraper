@@ -17,6 +17,21 @@ var findProducts = function() {
   var mapSingleProduct = function(row) {
     var sibling = row.nextSibling;
     var product = {
+      goesWith: {
+        naut: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Naut.gif"]'),
+        lamb: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Lamb.gif"]'),
+        grill: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Grill.gif"]'),
+        gris: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Gris.gif"]'),
+        fiskur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Fiskur.gif"]'),
+        skelfiskur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Skelfiskur.gif"]'),
+        ostur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Ostur.gif"]'),
+        villibrad: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Villibrad.gif"]'),
+        alifuglar: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Alifuglar.gif"]'),
+        pasta: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Pasta.gif"]'),
+        graenmeti: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Graenmetisrettir.gif"]'),
+        eftirrettir: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Eftirrettir.gif"]'),
+        lettariVillibrad: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/LettariVillibrad.gif"]')
+      },
       img: row.querySelector('.img img').src,
       link: row.querySelector('.title a').href,
       id: row.querySelector('.title span').innerText,
@@ -25,20 +40,7 @@ var findProducts = function() {
       abv: row.querySelector('.volume').innerText,
       price: row.querySelector('.price').innerText,
       description: sibling.querySelector('.description').innerText,
-      naut: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Naut.gif"]'),
-      lamb: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Lamb.gif"]'),
-      grill: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Grill.gif"]'),
-      lettariVillibrad: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/LettariVillibrad.gif"]'),
       tilbuidAdDrekka: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/TilbuidAdDrekka.gif"]'),
-      gris: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Gris.gif"]'),
-      fiskur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Fiskur.gif"]'),
-      skelfiskur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Skelfiskur.gif"]'),
-      ostur: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Ostur.gif"]'),
-      villibrad: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Villibrad.gif"]'),
-      alifuglar: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Alifuglar.gif"]'),
-      pasta: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Pasta.gif"]'),
-      graenmeti: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Graenmetisrettir.gif"]'),
-      eftirrettir: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/Eftirrettir.gif"]'),
       reserve: !!sibling.querySelector('.food-icon img[src="Addons/Origo/Module/Img/SpecialReserve.gif"]')
     };
 
