@@ -51,7 +51,6 @@ var scrapeMetaData = function (url, pagePool) {
       metadata.category = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSubCategory");
       metadata.wholeseller = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductSeller");
       metadata.country = scrapeUtils.getString(page, "#ctl01_ctl00_Label_ProductCountryOfOrigin");
-      metadata.reserve = scrapeUtils.exists(page, "#ctl01_ctl00_Image_SpecialReserve");
       metadata.description = scrapeUtils.getString(page, '#ctl01_ctl00_Label_ProductDescription');
       metadata.stockLastUpdated = scrapeUtils.getString(page, '#ctl01_ctl00_span_stockStatusLastUpdated strong')
         .replace('[', '')
