@@ -22,32 +22,130 @@ To get the full metadata scrape, you need to run it with the optional `--with-me
 ```json
 
 {
-    "abv": "14",
+    "abv": "13,5",
     "availability": [
         {
             "region": "HÖFUÐBORGARSVÆÐIÐ",
             "stores": [
                 {
-                    "numberInStock": 24,
+                    "numberInStock": 14,
+                    "store": "Austurstræti"
+                },
+                {
+                    "numberInStock": 33,
                     "store": "Kringlunni"
                 },
                 {
-                    "numberInStock": 11,
-                    "store": "Skútuvogi"
+                    "numberInStock": 24,
+                    "store": "Skeifunni"
                 },
                 {
-                    "numberInStock": 11,
+                    "numberInStock": 17,
+                    "store": "Stekkjarbakka"
+                },
+                {
+                    "numberInStock": 34,
                     "store": "Dalvegi"
                 },
                 {
+                    "numberInStock": 14,
+                    "store": "Smáralind"
+                }
+            ]
+        },
+        {
+            "region": "VESTURLAND",
+            "stores": [
+                {
+                    "numberInStock": 9,
+                    "store": "Akranesi"
+                }
+            ]
+        },
+        {
+            "region": "VESTFIRDIR",
+            "stores": [
+                {
                     "numberInStock": 10,
-                    "store": "Hafnarfirði"
+                    "store": "Ísafirði"
+                }
+            ]
+        },
+        {
+            "region": "NORÐURLAND",
+            "stores": [
+                {
+                    "numberInStock": 13,
+                    "store": "Sauðárkróki"
+                },
+                {
+                    "numberInStock": 12,
+                    "store": "Akureyri"
+                }
+            ]
+        },
+        {
+            "region": "AUSTURLAND",
+            "stores": [
+                {
+                    "numberInStock": 4,
+                    "store": "Egilsstöðum"
+                }
+            ]
+        },
+        {
+            "region": "SUÐURLAND",
+            "stores": [
+                {
+                    "numberInStock": 8,
+                    "store": "Reykjanesbæ"
+                },
+                {
+                    "numberInStock": 17,
+                    "store": "Selfossi"
                 }
             ]
         }
     ],
     "category": "Rauðvín",
-    "country": "Spánn",
+    "country": "Chile",
+    "description": "Rúbínrautt. Meðalfylling, ósætt, fersk sýra, miðlungstannín. Dökk ber, sólber, krydd, eik.",
+    "goesWith": {
+        "ali": false,
+        "beef": true,
+        "cheese": false,
+        "desserts": false,
+        "fish": false,
+        "game": false,
+        "grill": true,
+        "lamb": true,
+        "lightGame": false,
+        "pasta": false,
+        "pork": false,
+        "readyToDrink": true,
+        "shellfish": false,
+        "vegetables": false
+    },
+    "id": "10913",
+    "img": "http://www.vinbudin.is/ProductImages/ThumbnailSizeImages/10913.png",
+    "link": "http://www.vinbudin.is/DesktopDefault.aspx/tabid-54?productID=10913",
+    "price": "1.999 kr.",
+    "reserve": false,
+    "stockLastUpdated": "18.5.2015 18:49",
+    "title": "Adobe Cabernet Sauvignon Reserva",
+    "weight": "750 ml",
+    "wholeseller": "Haugen-Gruppen ehf.",
+    "year": "2013"
+}
+
+
+```
+
+#### Without metadata
+
+```json
+{
+    "abv": "14%",
     "description": "Kirsuberjarautt. Meðalfylling, ósætt, fersk sýra, miðlungstannín. Rauð ber, skógarbotn, laufkrydd, sveit.",
     "goesWith": {
         "ali": false,
@@ -70,43 +168,6 @@ To get the full metadata scrape, you need to run it with the optional `--with-me
     "link": "http://www.vinbudin.is/DesktopDefault.aspx/tabid-54?productID=21460",
     "price": "1.785 kr.",
     "reserve": false,
-    "stockLastUpdated": "18.5.2015 18:49",
-    "title": "1Pulso ",
-    "weight": "750 ml",
-    "wholeseller": "Ber ehf",
-    "year": "2010"
-}
-
-
-```
-
-#### Without metadata
-
-```json
-{
-    "abv": "14%",
-    "description": "Kirsuberjarautt. Meðalfylling, ósætt, fersk sýra, miðlungstannín. Rauð ber, skógarbotn, laufkrydd, sveit.",
-    "goesWith": {
-        "alifuglar": false,
-        "eftirrettir": false,
-        "fiskur": false,
-        "graenmeti": false,
-        "grill": true,
-        "gris": false,
-        "lamb": true,
-        "lettariVillibrad": true,
-        "naut": true,
-        "ostur": false,
-        "pasta": false,
-        "skelfiskur": false,
-        "villibrad": false
-    },
-    "id": "21460",
-    "img": "http://www.vinbudin.is/ProductImages/ThumbnailSizeImages/21460.png",
-    "link": "http://www.vinbudin.is/DesktopDefault.aspx/tabid-54?productID=21460",
-    "price": "1.785 kr.",
-    "reserve": false,
-    "tilbuidAdDrekka": true,
     "title": "1Pulso ",
     "weight": "750 ml"
 }
