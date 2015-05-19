@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "Scrapes the icelandinc state-owned liquor store",
   "main": "src/main.js",
+  "test": "mocha",
   "scripts": {
     "start": "npm install && phantomjs src/main.js"
   },
@@ -11,5 +12,9 @@
   "dependencies": {
     "merge": "^1.2.0",
     "q": "^1.4.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "should": "^6.0.3"
   }
 }

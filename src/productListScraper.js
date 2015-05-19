@@ -54,15 +54,14 @@ var findProducts = function() {
   Gets the next page on a vinbud product search page. Depends on a PhantomJS DOM.
  */
 var getNextPage = function () {
-  var current = document.querySelector('.selectedpage');
   var next = document.querySelector('.paging_button_next');
 
   if (!next || (next && next.classList && next.classList.contains('aspNetDisabled'))) {
-    return null;
+    return false;
   }
 
   next.click();
-  return current.innerText;
+  return true;
 };
 
 /**
@@ -89,15 +88,13 @@ var scrape = function (url, scraper) {
 
     console.log('Getting the next page');
 
-    var next = page.evaluate(getNextPage);
-
-    if (!next) {
+    if (!page.evaluate(getNextPage)) {
       console.log('There is no next page!');
-      scraper.emit('end');
-      return;
+      return scraper.emit('end');
     } else {
       console.log('Waiting for the page to load');
       scrapeUtils.waitForTextChange(page, 'span.selectedpage', function(n) {
+        console.log('New page: ' + n);
         scraper.emit('newPage', n);
         scrapeProducts();
       });
@@ -131,7 +128,7 @@ ProductListScraper.prototype.scrape = function() {
   try {
     scrape(this.ROOT_URL, this);
   } catch (e) {
-    this.trigger('error', e);
+    this.emit('error', e);
   }
 };
 
