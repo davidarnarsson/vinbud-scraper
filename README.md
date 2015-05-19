@@ -14,42 +14,36 @@ To run it, you need phantomjs on your path.
 npm install
 phantomjs src/main.js
 ```
-
-### Things that can be improved: 
-
- * Even though the "architecture" supports streaming product results directly to a file, the entire product array is stored in-memory, which is unnecessary. Should be an easy fix.
- * ~~The product metadata scraping could possibly be sped up alot with a little parallelization. That probably means master/slave processes or batching HTTP calls, and I'm too lazy for that :)~~ Turns out I wasn't too lazy.
- 
-
+To get the full metadata scrape, you need to run it with the optional `--with-metadata` parameter.  
 ### Example documents 
 
 #### With metadata
 
-```
+```json
 
 {  
-  "alifuglar":false,
   "description":"Rúbínrautt. Meðalfylling, ósætt, fersk sýra, miðlungstannín. Dökk ber, sólber, krydd, eik.",
-  "eftirrettir":false,
-  "fiskur":false,
-  "graenmeti":false,
-  "grill":true,
-  "gris":false,
   "id":"(10913)",
   "img":"http://www.vinbudin.is/ProductImages/ThumbnailSizeImages/10913.png",
-  "lamb":true,
-  "lettariVillibrad":false,
-  "link":"http://www.vinbudin.is/DesktopDefault.aspx/tabid-54?productID=10913",
-  "naut":true,
-  "ostur":false,
-  "pasta":false,
-  "price":"1.999 kr.",
-  "reserve":false,
-  "skelfiskur":false,
-  "tilbuidAdDrekka":true,
+  "link":"http://www.vinbudin.is/DesktopDefault.aspx/tabid-54?productID=10913", 
+  "price":"1.999 kr.",  
   "title":"Adobe Cabernet Sauvignon Reserva",
-  "villibrad":false,
-  "volume":"750 ml",
+  "goesWith": {
+    "ali":false,
+    "beef":true,
+    "cheese":false,
+    "desserts":false,
+    "fish":false,
+    "game":false,
+    "grill":true,
+    "lamb":true,
+    "lightGame":true,
+    "pasta":false,
+    "pork":false,
+    "readyToDrink":true,
+    "shellfish":false,
+    "vegetables":false
+  },
   "weight":"750 ml",
   "year":"2013",
   "abv":"13,5",
@@ -166,30 +160,32 @@ phantomjs src/main.js
 
 #### Without metadata
 
-```
-{  
-  "alifuglar":false,
-  "description":"Ljósjarðarberjarautt. Léttkolsýrt, hálfsætt, létt fylling, fersk sýra. Jarðarber.",
-  "eftirrettir":false,
-  "fiskur":false,
-  "graenmeti":true,
-  "grill":false,
-  "gris":false,
-  "id":"(21611)",
-  "img":"http://www.vinbudin.is/ProductImages/ThumbnailSizeImages/21611.png",
-  "lamb":false,
-  "lettariVillibrad":false,
-  "link":"http://www.vinbudin.is/DesktopDefault.aspx/tabid-54?productID=21611",
-  "naut":false,
-  "ostur":false,
-  "pasta":true,
-  "price":"1.499 kr.",
+```json
+{
+  "abv":"14%",
+  "description":"Kirsuberjarautt. Meðalfylling, ósætt, fersk sýra, miðlungstannín. Rauð ber, skógarbotn, laufkrydd, sveit.",
+  "goesWith": {
+    "ali":false,
+    "beef":true,
+    "cheese":false,
+    "desserts":false,
+    "fish":false,
+    "game":false,
+    "grill":true,
+    "lamb":true,
+    "lightGame":true,
+    "pasta":false,
+    "pork":false,
+    "readyToDrink":true,
+    "shellfish":false,
+    "vegetables":false
+  },
+  "id":"(21460)",
+  "img":"http://www.vinbudin.is/ProductImages/ThumbnailSizeImages/21460.png",
+  "link":"http://www.vinbudin.is/DesktopDefault.aspx/tabid-54?productID=21460",
+  "price":"1.785 kr.",
   "reserve":false,
-  "skelfiskur":false,
-  "tilbuidAdDrekka":true,
-  "title":"Black Tower Pink Bubbly ",
-  "villibrad":false,
-  "volume":"8,5%",
+  "title":"1Pulso ",
   "weight":"750 ml"
 }
 ```

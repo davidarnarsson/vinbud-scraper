@@ -1,6 +1,6 @@
 {
   "name": "vinbud-scraper",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Scrapes the icelandinc state-owned liquor store",
   "main": "src/main.js",
   "test": "mocha",
