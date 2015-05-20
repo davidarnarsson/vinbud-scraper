@@ -7,7 +7,7 @@ Emitter.prototype.on = function (msg, cb) {
 };
 
 Emitter.prototype.emit = function (msg, data) {
-  this.subscribers[msg].forEach(function (cb) {
+  (this.subscribers[msg] || []).forEach(function (cb) {
     cb(data);
   });
 };

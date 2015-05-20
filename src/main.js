@@ -6,28 +6,30 @@ var Q = require('q');
 var ProductListScraper = require('./productListScraper');
 var scrapeMetaData = require('./scrapeMetaData');
 var PagePool = require('./pagePool');
-var logger = require('./log');
-var s = new ProductListScraper(require('webpage').create());
+var logger = require('./log')();
+var debug = require('./log')('debug');
+
+var scraper = new ProductListScraper(require('webpage').create());
 
 var products = [];
 
 var dumpAndExit = function() {
-  logger().log('Dumping data to a file!');
+  logger.log('Dumping data to a file!');
   fs.write('../out/products-incomplete.json', JSON.stringify(products), 'w');
-  logger().log('Exiting!');
+  logger.log('Exiting!');
   phantom.exit();
 };
 
 var scrapeIndividualProduct = function(page) {
   return function(p) {
     var onSuccess = function(metadata) {
-      logger('trace').log('Success: ' + p.title);
+      logger.log('Success: ' + p.title);
       
       return merge(p, metadata);
     };
 
     var onError = function(e) {
-      logger('trace').log('Error: ' + p.title);
+      logger.log('Error: ' + p.title);
       return p;
     };
 
@@ -50,28 +52,28 @@ var onProductListScrapeEnd = function() {
   });
 };
 
-s.on('error', dumpAndExit);
+scraper.on('error', dumpAndExit);
 
-s.on('product', function(product) {
+scraper.on('product', function(product) {
   products.push(product);
 });
 
-s.on('newPage', function(pageNumber) {
-  logger('trace').log('New Page: ' + pageNumber);
+scraper.on('newPage', function(pageNumber) {
+  logger.log('New Page: ' + pageNumber);
 });
 
 if (system.args.indexOf('--with-metadata') !== -1) {
-  logger().log('Scraping with metadata!');
+  logger.log('Scraping with metadata!');
   // when the product list scrape is complete, write out the products
   // without metadata and then scrape the metadata.
-  s.on('end', onProductListScrapeEnd);
+  scraper.on('end', onProductListScrapeEnd);
 } else {
-  s.on('end', function() {
-    logger().log('Dumping data to json file!');
+  scraper.on('end', function() {
+    logger.log('Dumping data to json file!');
     fs.write('out/products-no-metadata.json', JSON.stringify(products), 'w');
-    logger().log('Exiting!');
+    logger.log('Exiting!');
     phantom.exit();
   });
 }
 
-s.scrape();
+scraper.scrape();

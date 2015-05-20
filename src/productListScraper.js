@@ -1,6 +1,9 @@
 var Emitter = require('./emitter');
 var scrapeUtils = require('./scrapeUtils');
 
+var debug = require('./log')('debug');
+var trace = require('./log')('trace');
+
 var ProductListScraper = function(page) {
   Emitter.call(this);
   this.page = page;
@@ -72,7 +75,7 @@ var getNextPage = function () {
 var scrape = function (url, scraper) {
   var page = scraper.page;
   page.onConsoleMessage = function (msg) {
-    console.log('Browser: ' + msg);
+    debug.log('Browser: ' + msg);
   };
   
   // because the page uses a sucky async paging mechanism
@@ -80,7 +83,7 @@ var scrape = function (url, scraper) {
   var scrapeProducts = function () {
     var products = page.evaluate(findProducts);
 
-    console.log('Got: ' + products.length + ' products');
+    trace.log('Got: ' + products.length + ' products');
 
     if (products && products.length) {
       products.map(function (p) {
@@ -88,15 +91,15 @@ var scrape = function (url, scraper) {
       });
     }
 
-    console.log('Getting the next page');
+    debug.log('Getting the next page');
 
     if (!page.evaluate(getNextPage)) {
-      console.log('There is no next page!');
+      trace.log('There is no next page!');
       return scraper.emit('end');
     } else {
-      console.log('Waiting for the page to load');
+      debug.log('Waiting for the page to load');
       scrapeUtils.waitForTextChange(page, 'span.selectedpage', function(n) {
-        console.log('New page: ' + n);
+        debug.log('New page: ' + n);
         scraper.emit('newPage', n);
         scrapeProducts();
       });
@@ -120,7 +123,7 @@ var scrape = function (url, scraper) {
                .classList.contains('page-size-active');
     }, function() {
         // we start a-scrapin'!
-        console.log('Starting to scrape!');
+        trace.log('Starting to scrape!');
         scrapeProducts();
       });
   });
@@ -131,6 +134,7 @@ ProductListScraper.prototype.scrape = function() {
     scrape(this.ROOT_URL, this);
   } catch (e) {
     this.emit('error', e);
+    debug.log(e);
   }
 };
 
