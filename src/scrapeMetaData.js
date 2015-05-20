@@ -11,7 +11,7 @@ var scrapeStockTables = function () {
     data.store = node.innerText;
 
     node = node.nextSibling;
-    data.numberInStock = parseInt(node.innerText);
+    data.numberInStock = parseInt(node.innerText) || node.innerText;
 
     return data;
   };
