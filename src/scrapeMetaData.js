@@ -11,7 +11,7 @@ var scrapeStockTables = function () {
     data.store = node.innerText;
 
     node = node.nextSibling;
-    data.numberInStock = parseInt(node.innerText) || node.innerText;
+    data.numberInStock = isNaN(parseInt(node.innerText)) ? node.innerText : parseInt(node.innerText);
 
     return data;
   };
