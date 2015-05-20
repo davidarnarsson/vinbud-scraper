@@ -1,9 +1,13 @@
+var debug = require('./log')('debug');
+
 var scrapeUtils = {
   waitForTextChange: function (page, selector, cb) {
     var current = this.getString(page, selector);
     var intervalId = setInterval(function () {
       var now = this.getString(page, selector);
+      debug.log('Waiting for text change...');
       if (current !== now) {
+        debug.log('Text changed! ' + now);
         clearInterval(intervalId);
         cb(now);
       }

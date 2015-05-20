@@ -1,11 +1,11 @@
 {
   "name": "vinbud-scraper",
   "version": "1.2.0",
-  "description": "Scrapes the icelandinc state-owned liquor store",
+  "description": "Scrapes the icelandic state-owned liquor store",
   "main": "src/main.js",
-  "test": "mocha",
   "scripts": {
-    "start": "npm install && phantomjs src/main.js"
+    "start": "npm install && phantomjs src/main.js",
+    "test": "mocha -R spec ./test"
   },
   "author": "Davíð Arnarsson",
   "license": "MIT",
