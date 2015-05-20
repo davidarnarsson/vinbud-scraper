@@ -19,7 +19,7 @@ var findProducts = function() {
     var product = {
       img: row.querySelector('.img img').src,
       link: row.querySelector('.title a').href,
-      id: row.querySelector('.title span').innerText.substring(1,6),
+      id: row.querySelector('.title span').innerText.slice(1,-1),
       title: row.querySelector('.title a').innerText,
       weight: row.querySelector('.weight').innerText,
       abv: row.querySelector('.volume').innerText,
