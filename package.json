@@ -1,12 +1,17 @@
 {
   "name": "vinbud-scraper",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Scrapes the icelandic state-owned liquor store",
   "main": "src/main.js",
   "scripts": {
     "start": "npm install && phantomjs src/main.js",
     "test": "mocha -R spec ./test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/davidarnarsson/vinbud-scraper.git"
+  },
+  "private": true,
   "author": "Davíð Arnarsson",
   "license": "MIT",
   "dependencies": {

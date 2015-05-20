@@ -15,6 +15,11 @@ npm install
 phantomjs src/main.js
 ```
 To get the full metadata scrape, you need to run it with the optional `--with-metadata` parameter.  
+
+### Tests
+
+Tests are executed using mocha. To execute the tests, run `npm test`.
+
 ### Example documents 
 
 #### With metadata

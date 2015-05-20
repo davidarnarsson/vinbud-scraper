@@ -119,8 +119,8 @@ var scrape = function (url, scraper) {
 
     // once the page has reloaded with 30 products
     scrapeUtils.waitFor(page, function() {
-      return document.querySelector('#ctl01_ctl00_LinkButton30ProductsOnPage')
-               .classList.contains('page-size-active');
+      var node = document.querySelector('#ctl01_ctl00_LinkButton30ProductsOnPage');
+      return node.classList && node.classList.contains('page-size-active');
     }, function() {
         // we start a-scrapin'!
         trace.log('Starting to scrape!');
