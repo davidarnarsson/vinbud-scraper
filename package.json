@@ -16,6 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "merge": "^1.2.0",
+    "minimist": "^1.1.1",
+    "phantomjs": "^1.9.16",
     "q": "^1.4.0"
   },
   "devDependencies": {

@@ -5,14 +5,19 @@ var Q = require('q');
  * oh god this state machine-y yuckiness. This depends on the PhantomJS DOM so 
  * all functions must be defined within the function which gets eval'd.
  */
-var scrapeStockTables = function () {
+var scrapeStockTables = function (options) {
   var scrapeStoreStock = function (node) {
     var data = {};
     data.store = node.innerText;
-
-    node = node.nextSibling;
-    data.numberInStock = isNaN(parseInt(node.innerText)) ? node.innerText : parseInt(node.innerText);
-
+    
+    node = node.nextElementSibling;
+    data.numberInStock = node.innerText; // isNaN(parseInt(node.innerText)) ? node.innerText : parseInt(node.innerText);
+    
+    if (options['include-type']) {
+      node = node.nextElementSibling;
+      data.type = node.innerText;
+    }
+    
     return data;
   };
 
@@ -20,7 +25,7 @@ var scrapeStockTables = function () {
     return {
       region: stockTable.querySelector('th').innerText,
       stores: Array.prototype.slice
-        .call(stockTable.querySelectorAll('td.oddRow.store'))
+        .call(stockTable.querySelectorAll('td.store'))
         .map(scrapeStoreStock)
     };
   };
@@ -32,9 +37,12 @@ var scrapeStockTables = function () {
 
 
 
-var scrapeMetaData = function (url, pagePool) {
+var scrapeMetaData = function (url, pagePool, options) {
   var deferred = Q.defer();
   pagePool.acquire().then(function(page) {
+    page.onConsoleMessage = function (msg) {
+      console.log('Browser: ' + msg);
+    };
     page.open(url, function (status) {
       if (status !== 'success') {
         pagePool.release(page);
@@ -54,7 +62,7 @@ var scrapeMetaData = function (url, pagePool) {
         .replace('[', '')
         .replace(']', '');
   
-      metadata.availability = page.evaluate(scrapeStockTables);
+      metadata.availability = page.evaluate(scrapeStockTables, options);
       pagePool.release(page);
       deferred.resolve(metadata);
     });   

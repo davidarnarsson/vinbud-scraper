@@ -1,25 +1,41 @@
 var fs = require('fs');
 var system = require('system');
+var minimist = require('minimist');
 var merge = require('merge');
 var Q = require('q');
-
 var ProductListScraper = require('./productListScraper');
 var scrapeMetaData = require('./scrapeMetaData');
 var PagePool = require('./pagePool');
 var logger = require('./log')();
 var debug = require('./log')('debug');
-
-var scraper = new ProductListScraper(require('webpage').create());
-
 var products = [];
+var args = minimist(system.args);
 
-var dumpAndExit = function() {
-  logger.log('Dumping data to a file!');
-  fs.write('../out/products-incomplete.json', JSON.stringify(products), 'w');
+if (args.level) {
+  logger.log('Log level set to "' + args.level + '"');
+  require('./log').setLevel(args.level);
+}
+
+var exit = function () {
   logger.log('Exiting!');
   phantom.exit();
 };
 
+var writeProducts = function(fileName, ps) {
+  ps = ps || products;
+  logger.log('Dumping data to a file!');
+  fs.write(fileName, JSON.stringify(products), 'w');
+};
+
+var dumpAndExit = function(e) {
+  logger.error(e);
+  writeProducts('out/products-incomplete.json');
+  exit();
+};
+
+/**
+ * Executes the metadata scrape for an individual product
+ */
 var scrapeIndividualProduct = function(page) {
   return function(p) {
     var onSuccess = function(metadata) {
@@ -33,47 +49,52 @@ var scrapeIndividualProduct = function(page) {
       return p;
     };
 
-    return scrapeMetaData(p.link, page).then(onSuccess, onError);
+    return scrapeMetaData(p.link, page, args).then(onSuccess, onError);
   };
 };
 
-var onProductListScrapeEnd = function() {
-  fs.write('out/products-no-metadata.json', JSON.stringify(products), 'w');
-
+/**
+ * Executed when the no-metadata scrape is done and the --with-metadata parameter is supplied
+ */
+var doScrapeMetadata = function() {
+  writeProducts('out/products-no-metadata.json');
+  
   // create a 10-page pool
   var pagePool = new PagePool(10);
 
   // ...and fire on all cylinders!
   Q.all(products.map(scrapeIndividualProduct(pagePool))).then(function(ps) {
     pagePool.destroy();
-    fs.write('out/products-metadata.json', JSON.stringify(ps), 'w');
-
-    phantom.exit();
+    writeProducts('out/products-metadata.json', ps);  
+    exit();
   });
 };
 
-scraper.on('error', dumpAndExit);
+/**
+ * Executed when the no-metadata scrape is done
+ */
+var onNoMetadataScrapeDone = function() {
+  writeProducts('out/products-no-metadata.json');
+  exit();
+};
 
-scraper.on('product', function(product) {
-  products.push(product);
-});
-
-scraper.on('newPage', function(pageNumber) {
+var onNewPage = function(pageNumber) {
   logger.log('New Page: ' + pageNumber);
-});
+};
 
-if (system.args.indexOf('--with-metadata') !== -1) {
-  logger.log('Scraping with metadata!');
-  // when the product list scrape is complete, write out the products
-  // without metadata and then scrape the metadata.
-  scraper.on('end', onProductListScrapeEnd);
-} else {
-  scraper.on('end', function() {
-    logger.log('Dumping data to json file!');
-    fs.write('out/products-no-metadata.json', JSON.stringify(products), 'w');
-    logger.log('Exiting!');
-    phantom.exit();
-  });
+var onProduct = function(product) {
+  products.push(product);
+};
+
+logger.log('Scraping ' + (args['with-metadata'] ? 'with' : 'without') + ' metadata!');
+if (args['include-type']) {
+  logger.log('\tincluding type information in stock data');
 }
+
+var scraper = new ProductListScraper(require('webpage').create());
+scraper.on('error', dumpAndExit);
+scraper.on('product', onProduct);
+scraper.on('newPage', onNewPage);
+scraper.on('end', args['with-metadata'] ? doScrapeMetadata : onNoMetadataScrapeDone);
 
 scraper.scrape();
