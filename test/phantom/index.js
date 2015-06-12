@@ -8,7 +8,8 @@ var runTests = function (tests, successes, fails) {
   if (!tests.length) {
     system.stdout.writeLine("\n---------------------------\n");
     system.stdout.writeLine((successes + fails) + ' tests run. ' + successes + ' successful. ' + fails + ' fails.\n\n');
-    phantom.exit();
+    
+    phantom.exit(fails);
   }
   
   var testName = tests.pop();
