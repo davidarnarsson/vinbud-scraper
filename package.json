@@ -5,7 +5,9 @@
   "main": "src/main.js",
   "scripts": {
     "start": "npm install && phantomjs src/main.js",
-    "test": "mocha -R spec ./test"
+    "node-test": "mocha -R spec ./test",
+    "phantom-test": "cd test/phantom; phantomjs index.js",
+    "test": "npm run node-test && npm run phantom-test"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,6 @@
   "dependencies": {
     "merge": "^1.2.0",
     "minimist": "^1.1.1",
-    "phantomjs": "^1.9.16",
     "q": "^1.4.0"
   },
   "devDependencies": {

@@ -14,7 +14,15 @@ To run it, you need phantomjs on your path.
 npm install
 phantomjs src/main.js
 ```
+
+### Options 
+
 To get the full metadata scrape, you need to run it with the optional `--with-metadata` parameter.  
+
+`--level [debug|trace]` sets the log level.
+
+`--include-type` includes stock type information in the metadata scrape.
+ 
 
 ### Tests
 

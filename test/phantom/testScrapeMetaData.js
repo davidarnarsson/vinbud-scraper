@@ -1,6 +1,7 @@
 
 var scrapeMetadata = require('../../src/scrapeMetaData');
 var PagePool = require('../../src/pagePool');
+require('../../src/log').setLevel('debug trace');
 
 module.exports = function (test) {
   var pagePool = new PagePool(1);

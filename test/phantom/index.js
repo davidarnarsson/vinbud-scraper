@@ -15,17 +15,17 @@ var runTests = function (tests, successes, fails) {
   var test = require('./' + testName);
   
   test(function(description, callback) {
-     system.stdout.write([testName, description, ':'].join(' '));
-     
+    system.stdout.write([testName, description, ':'].join(' '));
      try {
        callback(function (result) {
-         system.stdout.writeLine(result ? " success" : " fail");
+         system.stdout.write(result ? " success\n" : " fail\n");
          runTests(tests,successes + (result ? 1 : 0), fails + (result ? 0 : 1));
        });
      }
      catch (e) {
        system.stdout.writeLine(" fail");
        system.stdout.writeLine(e);
+       runTests(tests, successes, fails + 1);
      }
   });
 }; 
