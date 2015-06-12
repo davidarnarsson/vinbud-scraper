@@ -1,5 +1,7 @@
 # Vinbud scraper
 
+![Build status](https://travis-ci.org/davidarnarsson/vinbud-scraper.svg)
+
 Scrapes the icelandic state-owned liquor store for product information. 
 
 Requires PhantomJS 2.0 to run. Previous versions will not work.
