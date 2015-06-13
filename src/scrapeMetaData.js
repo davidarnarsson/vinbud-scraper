@@ -11,7 +11,7 @@ var scrapeStockTables = function (options) {
     data.store = node.innerText;
     
     node = node.nextElementSibling;
-    data.numberInStock = node.innerText; // isNaN(parseInt(node.innerText)) ? node.innerText : parseInt(node.innerText);
+    data.numberInStock = isNaN(parseInt(node.innerText)) ? node.innerText : parseInt(node.innerText);
     
     if (options['include-type']) {
       node = node.nextElementSibling;
